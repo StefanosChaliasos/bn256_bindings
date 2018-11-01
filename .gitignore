@@ -1,0 +1,6 @@
+*.swp
+*.DS_STORE
+mclpy/*.cpp
+bin/*
+build
+obj/*

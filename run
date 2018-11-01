@@ -1,0 +1,13 @@
+c++ -I/usr/local/opt/openssl/include -I/usr/local/opt/gmp/include -g3 -Wall -Wextra -Wformat=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wfloat-equal -Wpointer-arith -m64 -I mcl/include -I include -fomit-frame-pointer -DNDEBUG -O3 -march=native  -fPIC -DMCL_USE_LLVM=1 -c src/bn256_functions.cpp -o obj/bn256_functions.o -MMD -MP -MF obj/bn256_functions.d
+
+c++ obj/bn256_functions.o -o bin/bn_256_functions mcl/lib/libmcl.a -L/usr/local/opt/openssl/lib -L/usr/local/opt/gmp/lib -lgmp -lgmpxx -lcrypto -m64
+
+./bin/bn_256_functions
+
+emcc -O3 -I mcl/include/ -I cybozulib/include/ -I include mcl/src/fp.cpp src/bn256_functions.cpp src/js_bindings.cpp -DNDEBUG -s WASM=1 -s DISABLE_EXCEPTION_CATCHING=0 --bind -o js/functions.js
+
+# UBUNTU
+
+c++ -std=c++17 -I/usr/local/opt/openssl/include -I/usr/local/opt/gmp/include -g3 -Wall -Wextra -Wformat=2 -Wcast-qual -Wcast-align -Wwrite-strings -Wfloat-equal -Wpointer-arith -m64 -I mcl/include -I include -fomit-frame-pointer -DNDEBUG -O3 -march=native  -fPIC -DMCL_USE_LLVM=1 -c src/bn256_functions.cpp -o obj/bn256_functions.o -MMD -MP -MF obj/bn256_functions.d
+
+c++ -std=c++17 obj/bn256_functions.o -o bin/bn_256_functions mcl/lib/libmcl.a -L/usr/local/opt/openssl/lib -L/usr/local/opt/gmp/lib -lgmp -lgmpxx -lcrypto -m64
