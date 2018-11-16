@@ -54,6 +54,15 @@ std::vector<std::string> serialize_G2(mcl::bn256::G2 elem) {
     return result;
 }
 
+/*
+ * Use templates for the next two functions.
+ */
+std::string serialize_mpz(mpz_class elem) {
+    std::stringstream ss;
+    ss << elem;
+    return ss.str();
+}
+
 std::string serialize_Fr(mcl::bn256::Fr elem) {
     std::stringstream ss;
     ss << elem;
@@ -116,7 +125,83 @@ Keypair keygen() {
     return std::make_pair(s, PK);
 }
 
+
+/*
+ * Check if it's possible.
+ */
+mcl::bn256::G2 int_to_element(mcl::bn256::Fr integer) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::G2 elem;
+    mcl::bn256::G2::mul(elem, Q, integer);
+    return elem;
+}
+
+std::map<std::string, int> create_table(long n)
+{
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+
+    std::map<std::string, int> table;
+    for(int i = 1; i <= n; i++) {
+        mcl::bn256::G2 elem;
+        mcl::bn256::G2::mul(elem,Q,i);
+        elem.setIoMode(10);
+        std::stringstream ss;
+        ss << elem;
+        std::string s = ss.str();
+        std::string key = ss.str();
+        table[key] = i;
+    }
+    return table;
+}
+
+mcl::bn256::Fr element_to_int(mcl::bn256::G2 elem, long n) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    // Pass the map as parameter
+    std::map<std::string, int> table = create_table(n);
+    // Make it function
+    elem.setIoMode(10);
+    std::stringstream ss;
+    ss << elem;
+    std::string elem_str = ss.str();
+    std::string str = std::to_string(table[elem_str]);
+    mcl::bn256::Fr integer = deserialize_Fr(str);
+    return integer;
+}
+
+mcl::bn256::G2 get_random_element() {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    // Random exponent
+    mcl::bn256::Fr r;
+    r.setRand(rg);
+    // Random Element
+    mcl::bn256::G2 RANDOM;
+    mcl::bn256::G2::mul(RANDOM, Q, r);
+    return RANDOM;
+}
+
 namespace bindings {
+
+std::string get_modulus_serialized() {
+    mcl::bn::initPairing(mcl::BN_SNARK1);
+    std::string modulus = serialize_mpz(mcl::bn::BN::param.p);
+    return modulus;
+}
+
+std::string get_order_serialized() {
+    mcl::bn::initPairing(mcl::BN_SNARK1);
+    std::string order = serialize_mpz(mcl::bn::BN::param.r);
+    return order;
+}
+
+std::vector<std::string> get_generator_serialized() {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    std::vector<std::string> g = serialize_G2(Q);
+    return g;
+}
 
 bindings::S_keypair keygen_serialized() {
     Keypair keypair = keygen();
@@ -124,9 +209,65 @@ bindings::S_keypair keygen_serialized() {
     return s_keypair;
 }
 
+std::vector<std::string> int_to_element_serialized(std::string integer) {
+    std::vector<std::string> serialized_elem;
+    mcl::bn256::Fr Fr_integer = deserialize_Fr(integer);
+    mcl::bn256::G2 elem;
+    elem = int_to_element(Fr_integer);
+    serialized_elem = serialize_G2(elem);
+    return serialized_elem;
 }
 
-/* int main() { */
+std::string element_to_int_serialized(std::vector<std::string> str_elem,
+                                      long n) {
+    mcl::bn256::G2 elem = deserialize_G2(str_elem);
+    mcl::bn256::Fr Fr_integer = element_to_int(elem, n);
+    std::string integer = serialize_Fr(Fr_integer);
+    return integer;
+}
+
+bool is_valid_element_serialized(std::vector<std::string> str_elem) {
+    mcl::bn256::G2 elem = deserialize_G2(str_elem);
+    return elem.isValid();
+}
+
+std::vector<std::string> get_random_element_serialized() {
+    mcl::bn256::G2 elem = get_random_element();
+    std::vector<std::string> serialized_elem = serialize_G2(elem);
+    return serialized_elem;
+}
+
+std::vector<std::string> mul_serialized(std::vector<std::string> element,
+                                        std::string integer) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::G2 elem = deserialize_G2(element);
+    mcl::bn256::Fr fr = deserialize_Fr(integer);
+    mcl::bn256::G2 result;
+    mcl::bn256::G2::mul(result, elem, fr);
+    return serialize_G2(result);
+}
+
+std::vector<std::string> add_serialized(std::vector<std::string> element,
+                                        std::vector<std::string> addent) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::G2 elem = deserialize_G2(element);
+    mcl::bn256::G2 add = deserialize_G2(addent);
+    mcl::bn256::G2 result;
+    mcl::bn256::G2::add(result, elem, add);
+    return serialize_G2(result);
+}
+
+}
+
+int main() {
+    // std::cout << bindings::get_order_serialized() << std::endl;
+    // std::cout << bindings::get_modulus_serialized() << std::endl;
+    std::vector<std::string> a = bindings::int_to_element_serialized("10");
+    std::vector<std::string> ran = bindings::get_random_element_serialized();
+    // std::cout << bindings::is_valid_element_serialized(a) << std::endl;
+    // std::string b = bindings::element_to_int_serialized(a, 20);
     // Keypair keypair = keygen();
     // print_keypair(keypair);
-/* } */
+}

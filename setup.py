@@ -22,8 +22,8 @@ os.environ['CXX'] = 'c++'
 #  VERSION = 'python' + major + '.' + minor
 #  LIB_PATH = get_python_lib()
 
-ext_modules = [Extension("mclpy",
-                         sources=["mclpy/mclpy.pyx",
+ext_modules = [Extension("bn256",
+                         sources=["bn256/bn256.pyx",
                                   "src/bn256_functions.cpp"],
                          include_dirs=['include',
                                        '/usr/local/opt/openssl/include',
