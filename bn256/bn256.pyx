@@ -18,6 +18,7 @@ cdef unicode _ustring(s):
         raise TypeError(...)
 
 def int_to_element(integer):
+    integer = str(integer)
     integer = integer.encode('utf-8')
     temp = bn256.int_to_element_serialized(integer)
     elem = [t.decode("utf-8") for t in temp]
@@ -26,7 +27,7 @@ def int_to_element(integer):
 def element_to_int(elem, max_number):
     temp = [c.encode('utf-8') for c in elem]
     integer = bn256.element_to_int_serialized(temp, max_number)
-    return integer.decode("utf-8")
+    return int(integer.decode("utf-8"))
 
 def validate_element(elem):
     temp = [c.encode('utf-8') for c in elem]
@@ -40,12 +41,12 @@ def get_random_element():
 def get_modulus():
     temp = bn256.get_modulus_serialized()
     modulus = temp.decode("utf-8")
-    return modulus
+    return int(modulus)
 
 def get_order():
     temp = bn256.get_order_serialized()
     order = temp.decode("utf-8")
-    return order
+    return int(order)
 
 def get_generator():
     temp = bn256.get_generator_serialized()
