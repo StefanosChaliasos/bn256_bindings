@@ -1073,7 +1073,9 @@ static const char __pyx_k_keygen[] = "keygen";
 static const char __pyx_k_public[] = "public";
 static const char __pyx_k_secret[] = "secret";
 static const char __pyx_k_integer[] = "integer";
+static const char __pyx_k_inverse[] = "inverse";
 static const char __pyx_k_modulus[] = "modulus";
+static const char __pyx_k_is_equal[] = "is_equal";
 static const char __pyx_k_TypeError[] = "TypeError";
 static const char __pyx_k_generator[] = "generator";
 static const char __pyx_k_get_order[] = "get_order";
@@ -1105,6 +1107,8 @@ static PyObject *__pyx_n_s_get_order;
 static PyObject *__pyx_n_s_get_random_element;
 static PyObject *__pyx_n_s_int_to_element;
 static PyObject *__pyx_n_s_integer;
+static PyObject *__pyx_n_s_inverse;
+static PyObject *__pyx_n_s_is_equal;
 static PyObject *__pyx_n_s_keygen;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_max_number;
@@ -1132,6 +1136,8 @@ static PyObject *__pyx_pf_5bn256_12get_generator(CYTHON_UNUSED PyObject *__pyx_s
 static PyObject *__pyx_pf_5bn256_14keygen(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_5bn256_16mul(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_elem, PyObject *__pyx_v_integer); /* proto */
 static PyObject *__pyx_pf_5bn256_18add(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_elem1, PyObject *__pyx_v_elem2); /* proto */
+static PyObject *__pyx_pf_5bn256_20is_equal(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_elem1, PyObject *__pyx_v_elem2); /* proto */
+static PyObject *__pyx_pf_5bn256_22inverse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_elem); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
@@ -1145,7 +1151,9 @@ static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
+static PyObject *__pyx_tuple__14;
 static PyObject *__pyx_tuple__15;
+static PyObject *__pyx_tuple__16;
 static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_tuple__19;
 static PyObject *__pyx_tuple__21;
@@ -1154,8 +1162,10 @@ static PyObject *__pyx_tuple__25;
 static PyObject *__pyx_tuple__27;
 static PyObject *__pyx_tuple__29;
 static PyObject *__pyx_tuple__31;
-static PyObject *__pyx_codeobj__14;
-static PyObject *__pyx_codeobj__16;
+static PyObject *__pyx_tuple__33;
+static PyObject *__pyx_tuple__35;
+static PyObject *__pyx_tuple__37;
+static PyObject *__pyx_tuple__39;
 static PyObject *__pyx_codeobj__18;
 static PyObject *__pyx_codeobj__20;
 static PyObject *__pyx_codeobj__22;
@@ -1164,6 +1174,10 @@ static PyObject *__pyx_codeobj__26;
 static PyObject *__pyx_codeobj__28;
 static PyObject *__pyx_codeobj__30;
 static PyObject *__pyx_codeobj__32;
+static PyObject *__pyx_codeobj__34;
+static PyObject *__pyx_codeobj__36;
+static PyObject *__pyx_codeobj__38;
+static PyObject *__pyx_codeobj__40;
 
 /* "bn256.pyx":5
  * 
@@ -2827,6 +2841,7 @@ static PyObject *__pyx_pf_5bn256_18add(CYTHON_UNUSED PyObject *__pyx_self, PyObj
  *     temp2 = [c.encode('utf-8') for c in elem2]
  *     res = bn256.add_serialized(temp1, temp2)             # <<<<<<<<<<<<<<
  *     return [c.decode("utf-8") for c in res]
+ * 
  */
   __pyx_t_7 = __pyx_convert_vector_from_py_std_3a__3a_string(__pyx_v_temp1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 69, __pyx_L1_error)
   __pyx_t_8 = __pyx_convert_vector_from_py_std_3a__3a_string(__pyx_v_temp2); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 69, __pyx_L1_error)
@@ -2836,6 +2851,8 @@ static PyObject *__pyx_pf_5bn256_18add(CYTHON_UNUSED PyObject *__pyx_self, PyObj
  *     temp2 = [c.encode('utf-8') for c in elem2]
  *     res = bn256.add_serialized(temp1, temp2)
  *     return [c.decode("utf-8") for c in res]             # <<<<<<<<<<<<<<
+ * 
+ * def is_equal(elem1, elem2):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
@@ -2880,6 +2897,430 @@ static PyObject *__pyx_pf_5bn256_18add(CYTHON_UNUSED PyObject *__pyx_self, PyObj
   __pyx_L0:;
   __Pyx_XDECREF(__pyx_v_temp1);
   __Pyx_XDECREF(__pyx_v_temp2);
+  __Pyx_XDECREF(__pyx_v_c);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "bn256.pyx":72
+ *     return [c.decode("utf-8") for c in res]
+ * 
+ * def is_equal(elem1, elem2):             # <<<<<<<<<<<<<<
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5bn256_21is_equal(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_5bn256_21is_equal = {"is_equal", (PyCFunction)__pyx_pw_5bn256_21is_equal, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5bn256_21is_equal(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_elem1 = 0;
+  PyObject *__pyx_v_elem2 = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("is_equal (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_elem1,&__pyx_n_s_elem2,0};
+    PyObject* values[2] = {0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_elem1)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_elem2)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("is_equal", 1, 2, 2, 1); __PYX_ERR(0, 72, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "is_equal") < 0)) __PYX_ERR(0, 72, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+    }
+    __pyx_v_elem1 = values[0];
+    __pyx_v_elem2 = values[1];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("is_equal", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 72, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("bn256.is_equal", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_5bn256_20is_equal(__pyx_self, __pyx_v_elem1, __pyx_v_elem2);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5bn256_20is_equal(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_elem1, PyObject *__pyx_v_elem2) {
+  PyObject *__pyx_v_temp1 = NULL;
+  PyObject *__pyx_v_temp2 = NULL;
+  bool __pyx_v_res;
+  PyObject *__pyx_v_c = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  Py_ssize_t __pyx_t_3;
+  PyObject *(*__pyx_t_4)(PyObject *);
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  std::vector<std::string>  __pyx_t_7;
+  std::vector<std::string>  __pyx_t_8;
+  __Pyx_RefNannySetupContext("is_equal", 0);
+
+  /* "bn256.pyx":73
+ * 
+ * def is_equal(elem1, elem2):
+ *     temp1 = [c.encode('utf-8') for c in elem1]             # <<<<<<<<<<<<<<
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ *     res = bn256.is_equal_serialized(temp1, temp2)
+ */
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (likely(PyList_CheckExact(__pyx_v_elem1)) || PyTuple_CheckExact(__pyx_v_elem1)) {
+    __pyx_t_2 = __pyx_v_elem1; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
+    __pyx_t_4 = NULL;
+  } else {
+    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_elem1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 73, __pyx_L1_error)
+  }
+  for (;;) {
+    if (likely(!__pyx_t_4)) {
+      if (likely(PyList_CheckExact(__pyx_t_2))) {
+        if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
+        #else
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        #endif
+      } else {
+        if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 73, __pyx_L1_error)
+        #else
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        #endif
+      }
+    } else {
+      __pyx_t_5 = __pyx_t_4(__pyx_t_2);
+      if (unlikely(!__pyx_t_5)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(0, 73, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_5);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_c, __pyx_t_5);
+    __pyx_t_5 = 0;
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_c, __pyx_n_s_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 73, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 73, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_temp1 = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "bn256.pyx":74
+ * def is_equal(elem1, elem2):
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]             # <<<<<<<<<<<<<<
+ *     res = bn256.is_equal_serialized(temp1, temp2)
+ *     return res
+ */
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (likely(PyList_CheckExact(__pyx_v_elem2)) || PyTuple_CheckExact(__pyx_v_elem2)) {
+    __pyx_t_2 = __pyx_v_elem2; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
+    __pyx_t_4 = NULL;
+  } else {
+    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_elem2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 74, __pyx_L1_error)
+  }
+  for (;;) {
+    if (likely(!__pyx_t_4)) {
+      if (likely(PyList_CheckExact(__pyx_t_2))) {
+        if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_6 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_6); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 74, __pyx_L1_error)
+        #else
+        __pyx_t_6 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 74, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        #endif
+      } else {
+        if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_6); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 74, __pyx_L1_error)
+        #else
+        __pyx_t_6 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 74, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        #endif
+      }
+    } else {
+      __pyx_t_6 = __pyx_t_4(__pyx_t_2);
+      if (unlikely(!__pyx_t_6)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(0, 74, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_6);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_c, __pyx_t_6);
+    __pyx_t_6 = 0;
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_c, __pyx_n_s_encode); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 74, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 74, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_5))) __PYX_ERR(0, 74, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_temp2 = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "bn256.pyx":75
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ *     res = bn256.is_equal_serialized(temp1, temp2)             # <<<<<<<<<<<<<<
+ *     return res
+ * 
+ */
+  __pyx_t_7 = __pyx_convert_vector_from_py_std_3a__3a_string(__pyx_v_temp1); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_t_8 = __pyx_convert_vector_from_py_std_3a__3a_string(__pyx_v_temp2); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 75, __pyx_L1_error)
+  __pyx_v_res = bindings::is_equal_serialized(__pyx_t_7, __pyx_t_8);
+
+  /* "bn256.pyx":76
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ *     res = bn256.is_equal_serialized(temp1, temp2)
+ *     return res             # <<<<<<<<<<<<<<
+ * 
+ * def inverse(elem):
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyBool_FromLong(__pyx_v_res); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 76, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "bn256.pyx":72
+ *     return [c.decode("utf-8") for c in res]
+ * 
+ * def is_equal(elem1, elem2):             # <<<<<<<<<<<<<<
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("bn256.is_equal", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_temp1);
+  __Pyx_XDECREF(__pyx_v_temp2);
+  __Pyx_XDECREF(__pyx_v_c);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "bn256.pyx":78
+ *     return res
+ * 
+ * def inverse(elem):             # <<<<<<<<<<<<<<
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5bn256_23inverse(PyObject *__pyx_self, PyObject *__pyx_v_elem); /*proto*/
+static PyMethodDef __pyx_mdef_5bn256_23inverse = {"inverse", (PyCFunction)__pyx_pw_5bn256_23inverse, METH_O, 0};
+static PyObject *__pyx_pw_5bn256_23inverse(PyObject *__pyx_self, PyObject *__pyx_v_elem) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("inverse (wrapper)", 0);
+  __pyx_r = __pyx_pf_5bn256_22inverse(__pyx_self, ((PyObject *)__pyx_v_elem));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5bn256_22inverse(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_elem) {
+  PyObject *__pyx_v_temp = NULL;
+  std::vector<std::string>  __pyx_v_res;
+  PyObject *__pyx_v_c = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  Py_ssize_t __pyx_t_3;
+  PyObject *(*__pyx_t_4)(PyObject *);
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  std::vector<std::string>  __pyx_t_7;
+  std::vector<std::string> ::iterator __pyx_t_8;
+  std::string __pyx_t_9;
+  __Pyx_RefNannySetupContext("inverse", 0);
+
+  /* "bn256.pyx":79
+ * 
+ * def inverse(elem):
+ *     temp = [c.encode('utf-8') for c in elem]             # <<<<<<<<<<<<<<
+ *     res = bn256.inverse_serialized(temp)
+ *     return [c.decode("utf-8") for c in res]
+ */
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (likely(PyList_CheckExact(__pyx_v_elem)) || PyTuple_CheckExact(__pyx_v_elem)) {
+    __pyx_t_2 = __pyx_v_elem; __Pyx_INCREF(__pyx_t_2); __pyx_t_3 = 0;
+    __pyx_t_4 = NULL;
+  } else {
+    __pyx_t_3 = -1; __pyx_t_2 = PyObject_GetIter(__pyx_v_elem); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_4 = Py_TYPE(__pyx_t_2)->tp_iternext; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 79, __pyx_L1_error)
+  }
+  for (;;) {
+    if (likely(!__pyx_t_4)) {
+      if (likely(PyList_CheckExact(__pyx_t_2))) {
+        if (__pyx_t_3 >= PyList_GET_SIZE(__pyx_t_2)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_5 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L1_error)
+        #else
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        #endif
+      } else {
+        if (__pyx_t_3 >= PyTuple_GET_SIZE(__pyx_t_2)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_2, __pyx_t_3); __Pyx_INCREF(__pyx_t_5); __pyx_t_3++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L1_error)
+        #else
+        __pyx_t_5 = PySequence_ITEM(__pyx_t_2, __pyx_t_3); __pyx_t_3++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        #endif
+      }
+    } else {
+      __pyx_t_5 = __pyx_t_4(__pyx_t_2);
+      if (unlikely(!__pyx_t_5)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(0, 79, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_5);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_c, __pyx_t_5);
+    __pyx_t_5 = 0;
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_c, __pyx_n_s_encode); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__15, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 79, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 79, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_v_temp = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "bn256.pyx":80
+ * def inverse(elem):
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)             # <<<<<<<<<<<<<<
+ *     return [c.decode("utf-8") for c in res]
+ */
+  __pyx_t_7 = __pyx_convert_vector_from_py_std_3a__3a_string(__pyx_v_temp); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 80, __pyx_L1_error)
+  __pyx_v_res = bindings::inverse_serialized(__pyx_t_7);
+
+  /* "bn256.pyx":81
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)
+ *     return [c.decode("utf-8") for c in res]             # <<<<<<<<<<<<<<
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_8 = __pyx_v_res.begin();
+  for (;;) {
+    if (!(__pyx_t_8 != __pyx_v_res.end())) break;
+    __pyx_t_9 = *__pyx_t_8;
+    ++__pyx_t_8;
+    __pyx_t_2 = __pyx_convert_PyBytes_string_to_py_std__in_string(__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_XDECREF_SET(__pyx_v_c, __pyx_t_2);
+    __pyx_t_2 = 0;
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_c, __pyx_n_s_decode); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_1, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  }
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "bn256.pyx":78
+ *     return res
+ * 
+ * def inverse(elem):             # <<<<<<<<<<<<<<
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("bn256.inverse", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_temp);
   __Pyx_XDECREF(__pyx_v_c);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
@@ -3469,6 +3910,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_get_random_element, __pyx_k_get_random_element, sizeof(__pyx_k_get_random_element), 0, 0, 1, 1},
   {&__pyx_n_s_int_to_element, __pyx_k_int_to_element, sizeof(__pyx_k_int_to_element), 0, 0, 1, 1},
   {&__pyx_n_s_integer, __pyx_k_integer, sizeof(__pyx_k_integer), 0, 0, 1, 1},
+  {&__pyx_n_s_inverse, __pyx_k_inverse, sizeof(__pyx_k_inverse), 0, 0, 1, 1},
+  {&__pyx_n_s_is_equal, __pyx_k_is_equal, sizeof(__pyx_k_is_equal), 0, 0, 1, 1},
   {&__pyx_n_s_keygen, __pyx_k_keygen, sizeof(__pyx_k_keygen), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_max_number, __pyx_k_max_number, sizeof(__pyx_k_max_number), 0, 0, 1, 1},
@@ -3617,10 +4060,54 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp2 = [c.encode('utf-8') for c in elem2]
  *     res = bn256.add_serialized(temp1, temp2)
  *     return [c.decode("utf-8") for c in res]             # <<<<<<<<<<<<<<
+ * 
+ * def is_equal(elem1, elem2):
  */
   __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__12);
   __Pyx_GIVEREF(__pyx_tuple__12);
+
+  /* "bn256.pyx":73
+ * 
+ * def is_equal(elem1, elem2):
+ *     temp1 = [c.encode('utf-8') for c in elem1]             # <<<<<<<<<<<<<<
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ *     res = bn256.is_equal_serialized(temp1, temp2)
+ */
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
+
+  /* "bn256.pyx":74
+ * def is_equal(elem1, elem2):
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]             # <<<<<<<<<<<<<<
+ *     res = bn256.is_equal_serialized(temp1, temp2)
+ *     return res
+ */
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 74, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
+
+  /* "bn256.pyx":79
+ * 
+ * def inverse(elem):
+ *     temp = [c.encode('utf-8') for c in elem]             # <<<<<<<<<<<<<<
+ *     res = bn256.inverse_serialized(temp)
+ *     return [c.decode("utf-8") for c in res]
+ */
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 79, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
+
+  /* "bn256.pyx":81
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)
+ *     return [c.decode("utf-8") for c in res]             # <<<<<<<<<<<<<<
+ */
+  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_utf_8); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
 
   /* "bn256.pyx":20
  *         raise TypeError(...)
@@ -3629,10 +4116,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     integer = integer.encode('utf-8')
  *     temp = bn256.int_to_element_serialized(integer)
  */
-  __pyx_tuple__13 = PyTuple_Pack(4, __pyx_n_s_integer, __pyx_n_s_temp, __pyx_n_s_elem, __pyx_n_s_t); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 20, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_int_to_element, 20, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_tuple__17 = PyTuple_Pack(4, __pyx_n_s_integer, __pyx_n_s_temp, __pyx_n_s_elem, __pyx_n_s_t); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_int_to_element, 20, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 20, __pyx_L1_error)
 
   /* "bn256.pyx":26
  *     return elem
@@ -3641,10 +4128,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = [c.encode('utf-8') for c in elem]
  *     integer = bn256.element_to_int_serialized(temp, max_number)
  */
-  __pyx_tuple__15 = PyTuple_Pack(5, __pyx_n_s_elem, __pyx_n_s_max_number, __pyx_n_s_temp, __pyx_n_s_integer, __pyx_n_s_c); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 26, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_element_to_int, 26, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_tuple__19 = PyTuple_Pack(5, __pyx_n_s_elem, __pyx_n_s_max_number, __pyx_n_s_temp, __pyx_n_s_integer, __pyx_n_s_c); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__19);
+  __Pyx_GIVEREF(__pyx_tuple__19);
+  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_element_to_int, 26, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(0, 26, __pyx_L1_error)
 
   /* "bn256.pyx":31
  *     return integer.decode("utf-8")
@@ -3653,10 +4140,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = [c.encode('utf-8') for c in elem]
  *     return bn256.is_valid_element_serialized(temp)
  */
-  __pyx_tuple__17 = PyTuple_Pack(3, __pyx_n_s_elem, __pyx_n_s_temp, __pyx_n_s_c); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 31, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_validate_element, 31, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(3, __pyx_n_s_elem, __pyx_n_s_temp, __pyx_n_s_c); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(1, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_validate_element, 31, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 31, __pyx_L1_error)
 
   /* "bn256.pyx":35
  *     return bn256.is_valid_element_serialized(temp)
@@ -3665,10 +4152,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = bn256.get_random_element_serialized()
  *     elem = [t.decode("utf-8") for t in temp]
  */
-  __pyx_tuple__19 = PyTuple_Pack(3, __pyx_n_s_temp, __pyx_n_s_elem, __pyx_n_s_t); if (unlikely(!__pyx_tuple__19)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__19);
-  __Pyx_GIVEREF(__pyx_tuple__19);
-  __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_random_element, 35, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __pyx_tuple__23 = PyTuple_Pack(3, __pyx_n_s_temp, __pyx_n_s_elem, __pyx_n_s_t); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(0, 35, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_random_element, 35, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 35, __pyx_L1_error)
 
   /* "bn256.pyx":40
  *     return elem
@@ -3677,10 +4164,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = bn256.get_modulus_serialized()
  *     modulus = temp.decode("utf-8")
  */
-  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_temp, __pyx_n_s_modulus); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 40, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__21);
-  __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_modulus, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_tuple__25 = PyTuple_Pack(2, __pyx_n_s_temp, __pyx_n_s_modulus); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
+  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_modulus, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 40, __pyx_L1_error)
 
   /* "bn256.pyx":45
  *     return modulus
@@ -3689,10 +4176,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = bn256.get_order_serialized()
  *     order = temp.decode("utf-8")
  */
-  __pyx_tuple__23 = PyTuple_Pack(2, __pyx_n_s_temp, __pyx_n_s_order); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(0, 45, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__23);
-  __Pyx_GIVEREF(__pyx_tuple__23);
-  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_order, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_tuple__27 = PyTuple_Pack(2, __pyx_n_s_temp, __pyx_n_s_order); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__27);
+  __Pyx_GIVEREF(__pyx_tuple__27);
+  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_order, 45, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 45, __pyx_L1_error)
 
   /* "bn256.pyx":50
  *     return order
@@ -3701,10 +4188,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = bn256.get_generator_serialized()
  *     generator = [t.decode("utf-8") for t in temp]
  */
-  __pyx_tuple__25 = PyTuple_Pack(3, __pyx_n_s_temp, __pyx_n_s_generator, __pyx_n_s_t); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(0, 50, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__25);
-  __Pyx_GIVEREF(__pyx_tuple__25);
-  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_generator, 50, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_tuple__29 = PyTuple_Pack(3, __pyx_n_s_temp, __pyx_n_s_generator, __pyx_n_s_t); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__29);
+  __Pyx_GIVEREF(__pyx_tuple__29);
+  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_get_generator, 50, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 50, __pyx_L1_error)
 
   /* "bn256.pyx":55
  *     return generator
@@ -3713,10 +4200,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     secret, public = bn256.keygen_serialized()
  *     return secret.decode("utf-8"), [t.decode("utf-8") for t in public]
  */
-  __pyx_tuple__27 = PyTuple_Pack(3, __pyx_n_s_secret, __pyx_n_s_public, __pyx_n_s_t); if (unlikely(!__pyx_tuple__27)) __PYX_ERR(0, 55, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__27);
-  __Pyx_GIVEREF(__pyx_tuple__27);
-  __pyx_codeobj__28 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__27, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_keygen, 55, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__28)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_tuple__31 = PyTuple_Pack(3, __pyx_n_s_secret, __pyx_n_s_public, __pyx_n_s_t); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__31);
+  __Pyx_GIVEREF(__pyx_tuple__31);
+  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_keygen, 55, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 55, __pyx_L1_error)
 
   /* "bn256.pyx":59
  *     return secret.decode("utf-8"), [t.decode("utf-8") for t in public]
@@ -3725,10 +4212,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp = [c.encode('utf-8') for c in elem]
  *     integer = str(integer)
  */
-  __pyx_tuple__29 = PyTuple_Pack(6, __pyx_n_s_elem, __pyx_n_s_integer, __pyx_n_s_temp, __pyx_n_s_temp2, __pyx_n_s_res, __pyx_n_s_c); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 59, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__29);
-  __Pyx_GIVEREF(__pyx_tuple__29);
-  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_mul, 59, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __pyx_tuple__33 = PyTuple_Pack(6, __pyx_n_s_elem, __pyx_n_s_integer, __pyx_n_s_temp, __pyx_n_s_temp2, __pyx_n_s_res, __pyx_n_s_c); if (unlikely(!__pyx_tuple__33)) __PYX_ERR(0, 59, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__33);
+  __Pyx_GIVEREF(__pyx_tuple__33);
+  __pyx_codeobj__34 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__33, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_mul, 59, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__34)) __PYX_ERR(0, 59, __pyx_L1_error)
 
   /* "bn256.pyx":66
  *     return [c.decode("utf-8") for c in res]
@@ -3737,10 +4224,34 @@ static int __Pyx_InitCachedConstants(void) {
  *     temp1 = [c.encode('utf-8') for c in elem1]
  *     temp2 = [c.encode('utf-8') for c in elem2]
  */
-  __pyx_tuple__31 = PyTuple_Pack(6, __pyx_n_s_elem1, __pyx_n_s_elem2, __pyx_n_s_temp1, __pyx_n_s_temp2, __pyx_n_s_res, __pyx_n_s_c); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 66, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__31);
-  __Pyx_GIVEREF(__pyx_tuple__31);
-  __pyx_codeobj__32 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__31, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_add, 66, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__32)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_tuple__35 = PyTuple_Pack(6, __pyx_n_s_elem1, __pyx_n_s_elem2, __pyx_n_s_temp1, __pyx_n_s_temp2, __pyx_n_s_res, __pyx_n_s_c); if (unlikely(!__pyx_tuple__35)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__35);
+  __Pyx_GIVEREF(__pyx_tuple__35);
+  __pyx_codeobj__36 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__35, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_add, 66, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__36)) __PYX_ERR(0, 66, __pyx_L1_error)
+
+  /* "bn256.pyx":72
+ *     return [c.decode("utf-8") for c in res]
+ * 
+ * def is_equal(elem1, elem2):             # <<<<<<<<<<<<<<
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ */
+  __pyx_tuple__37 = PyTuple_Pack(6, __pyx_n_s_elem1, __pyx_n_s_elem2, __pyx_n_s_temp1, __pyx_n_s_temp2, __pyx_n_s_res, __pyx_n_s_c); if (unlikely(!__pyx_tuple__37)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__37);
+  __Pyx_GIVEREF(__pyx_tuple__37);
+  __pyx_codeobj__38 = (PyObject*)__Pyx_PyCode_New(2, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__37, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_is_equal, 72, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__38)) __PYX_ERR(0, 72, __pyx_L1_error)
+
+  /* "bn256.pyx":78
+ *     return res
+ * 
+ * def inverse(elem):             # <<<<<<<<<<<<<<
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)
+ */
+  __pyx_tuple__39 = PyTuple_Pack(4, __pyx_n_s_elem, __pyx_n_s_temp, __pyx_n_s_res, __pyx_n_s_c); if (unlikely(!__pyx_tuple__39)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__39);
+  __Pyx_GIVEREF(__pyx_tuple__39);
+  __pyx_codeobj__40 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__39, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bn256_bn256_pyx, __pyx_n_s_inverse, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__40)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -4018,6 +4529,30 @@ static int __pyx_pymod_exec_bn256(PyObject *__pyx_pyinit_module)
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5bn256_19add, NULL, __pyx_n_s_bn256); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_add, __pyx_t_1) < 0) __PYX_ERR(0, 66, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "bn256.pyx":72
+ *     return [c.decode("utf-8") for c in res]
+ * 
+ * def is_equal(elem1, elem2):             # <<<<<<<<<<<<<<
+ *     temp1 = [c.encode('utf-8') for c in elem1]
+ *     temp2 = [c.encode('utf-8') for c in elem2]
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5bn256_21is_equal, NULL, __pyx_n_s_bn256); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_is_equal, __pyx_t_1) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "bn256.pyx":78
+ *     return res
+ * 
+ * def inverse(elem):             # <<<<<<<<<<<<<<
+ *     temp = [c.encode('utf-8') for c in elem]
+ *     res = bn256.inverse_serialized(temp)
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5bn256_23inverse, NULL, __pyx_n_s_bn256); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_inverse, __pyx_t_1) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "bn256.pyx":1

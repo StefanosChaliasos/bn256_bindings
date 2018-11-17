@@ -33,3 +33,9 @@ cdef extern from "bn256_functions.h" namespace "bindings":
 
 cdef extern from "bn256_functions.h" namespace "bindings":
     vector[string] add_serialized(vector[string], vector[string])
+
+cdef extern from "bn256_functions.h" namespace "bindings":
+    bool is_equal_serialized(vector[string], vector[string])
+
+cdef extern from "bn256_functions.h" namespace "bindings":
+    vector[string] inverse_serialized(vector[string])

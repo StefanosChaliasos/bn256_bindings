@@ -259,6 +259,24 @@ std::vector<std::string> add_serialized(std::vector<std::string> element,
     return serialize_G2(result);
 }
 
+bool is_equal_serialized(std::vector<std::string> element1,
+                         std::vector<std::string> element2) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 elem1 = deserialize_G2(element1);
+    mcl::bn256::G2 elem2 = deserialize_G2(element2);
+    return (elem1 == elem2);
+}
+
+std::vector<std::string> inverse_serialized(std::vector<std::string> element) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mpz_class o = mcl::bn::BN::param.r;
+    mpz_class o_ = o - 1;
+    mcl::bn256::G2 elem = deserialize_G2(element);
+    mcl::bn256::G2 inverse;
+    mcl::bn256::G2::mul(inverse, elem, o_);
+    return serialize_G2(inverse);
+}
+
 }
 
 int main() {
@@ -266,6 +284,49 @@ int main() {
     // std::cout << bindings::get_modulus_serialized() << std::endl;
     std::vector<std::string> a = bindings::int_to_element_serialized("10");
     std::vector<std::string> ran = bindings::get_random_element_serialized();
+
+    // EQUALS CHECK
+    mcl::bn256::G2 aa = get_random_element();
+    mcl::bn256::G2 bb = aa;
+    mcl::bn256::G2 cc = get_random_element();
+    if (aa == bb) {
+        std::cout << "OK" << std::endl;
+    }
+
+
+    mcl::bn::initPairing(mcl::BN_SNARK1);
+
+    // ORDER CHECK
+    // std::string o = serialize_mpz(mcl::bn::BN::param.r);
+    mpz_class o = mcl::bn::BN::param.r;
+    // mcl::bn256::Fr order = deserialize_Fr(o);
+    mcl::bn256::G2 dd;
+    mcl::bn256::G2 ee;
+    mcl::bn256::G2::mul(dd, aa, o);
+    mcl::bn256::G2::mul(ee, cc, o);
+
+    if (dd == ee) {
+        std::cout << "OK" << std::endl;
+    } else {
+        std::cout << "OUPS" << std::endl;
+    }
+
+    // INVERSE CHECK
+    mpz_class o_ = o - 1;
+
+    mcl::bn256::G2 n1 = get_random_element();
+    mcl::bn256::G2 n1_inverse;
+    mcl::bn256::G2::mul(n1_inverse, n1, o_);
+
+    mcl::bn256::G2 one;
+    mcl::bn256::G2::add(one, n1_inverse, n1);
+
+    if (one == dd) {
+        std::cout << "OK" << std::endl;
+    } else {
+        std::cout << "OUPS" << std::endl;
+    }
+
     // std::cout << bindings::is_valid_element_serialized(a) << std::endl;
     // std::string b = bindings::element_to_int_serialized(a, 20);
     // Keypair keypair = keygen();

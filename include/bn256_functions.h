@@ -38,6 +38,10 @@ std::vector<std::string> mul_serialized(std::vector<std::string> element,
 std::vector<std::string> add_serialized(std::vector<std::string> element,
                                         std::vector<std::string> addent);
 
+bool is_equal_serialized(std::vector<std::string> elem1,
+                         std::vector<std::string> elem2);
+
+std::vector<std::string> inverse_serialized(std::vector<std::string> element);
 }
 
 

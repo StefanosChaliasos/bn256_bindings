@@ -68,3 +68,14 @@ def add(elem1, elem2):
     temp2 = [c.encode('utf-8') for c in elem2]
     res = bn256.add_serialized(temp1, temp2)
     return [c.decode("utf-8") for c in res]
+
+def is_equal(elem1, elem2):
+    temp1 = [c.encode('utf-8') for c in elem1]
+    temp2 = [c.encode('utf-8') for c in elem2]
+    res = bn256.is_equal_serialized(temp1, temp2)
+    return res
+
+def inverse(elem):
+    temp = [c.encode('utf-8') for c in elem]
+    res = bn256.inverse_serialized(temp)
+    return [c.decode("utf-8") for c in res]
