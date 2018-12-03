@@ -55,6 +55,26 @@ std::vector<std::string> serialize_G2(mcl::bn256::G2 elem) {
 }
 
 /*
+ * use template
+ */
+std::vector<std::string> serialize_G1(mcl::bn256::G1 elem) {
+    // Set affine representation
+    elem.setIoMode(10);
+    std::stringstream ss;
+    ss << elem;
+    std::string string_elem = ss.str();
+    std::vector<std::string> result;
+    std::string coordinate;
+    std::istringstream coordinateStream(string_elem);
+    while (std::getline(coordinateStream, coordinate, ' ')) {
+        result.push_back(coordinate);
+    }
+    // Remove first coordinate which always is 1
+    result.erase(result.begin());
+    return result;
+}
+
+/*
  * Use templates for the next two functions.
  */
 std::string serialize_mpz(mpz_class elem) {
@@ -77,6 +97,19 @@ mcl::bn256::G2 deserialize_G2(std::vector<std::string> s_elem) {
     for (auto i = s_elem.begin(); i != s_elem.end(); ++i)
         temp += " " + *i;
     mcl::bn256::G2 result;
+    std::stringstream ssresult;
+    ssresult.str(temp);
+    ssresult >> result;
+    return result;
+}
+
+mcl::bn256::G1 deserialize_G1(std::vector<std::string> s_elem) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    // The first coordinate is 1 because we have affine coordinates
+    std::string temp = "1 ";
+    for (auto i = s_elem.begin(); i != s_elem.end(); ++i)
+        temp += " " + *i;
+    mcl::bn256::G1 result;
     std::stringstream ssresult;
     ssresult.str(temp);
     ssresult >> result;
@@ -182,6 +215,39 @@ mcl::bn256::G2 get_random_element() {
     return RANDOM;
 }
 
+// add bls namespace
+
+void Hash(mcl::bn256::G1& P, const std::string& m)
+{
+	mcl::bn256::Fp t;
+	t.setHashOf(m);
+	mcl::bn256::mapToG1(P, t);
+}
+
+void KeyGen(mcl::bn256::Fr& s, mcl::bn256::G2& pub, const mcl::bn256::G2& Q)
+{
+	s.setRand();
+	mcl::bn256::G2::mul(pub, Q, s); // pub = sQ
+}
+
+void Sign(mcl::bn256::G1& sign, const mcl::bn256::Fr& s, const std::string& m)
+{
+	mcl::bn256::G1 Hm;
+	Hash(Hm, m);
+	mcl::bn256::G1::mul(sign, Hm, s); // sign = s H(m)
+}
+
+bool Verify(const mcl::bn256::G1& sign, const mcl::bn256::G2& Q,
+            const mcl::bn256::G2& pub, const std::string& m)
+{
+	mcl::bn256::Fp12 e1, e2;
+	mcl::bn256::G1 Hm;
+	Hash(Hm, m);
+	mcl::bn256::pairing(e1, sign, Q); // e1 = e(sign, Q)
+	mcl::bn256::pairing(e2, Hm, pub); // e2 = e(Hm, sQ)
+	return e1 == e2;
+}
+
 namespace bindings {
 
 std::string get_modulus_serialized() {
@@ -277,6 +343,32 @@ std::vector<std::string> inverse_serialized(std::vector<std::string> element) {
     return serialize_G2(inverse);
 }
 
+std::vector<std::string> bls_sign(std::vector<std::string> pk,
+                                  std::string secret,
+                                  std::string m) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::Fr s = deserialize_Fr(secret);
+    mcl::bn256::G2 pub = deserialize_G2(pk);
+    mcl::bn256::G1 sign;
+    Sign(sign, s, m);
+    return serialize_G1(sign);
+/*     std::cout << "sign " << sign << std::endl; */
+    // std::vector<std::string> temp = serialize_G1(sign);
+    // print_vector(temp);
+    // mcl::bn256::G1 temp2 = deserialize_G1(temp);
+    /* std::cout << "sign " << sign << std::endl; */
+}
+
+bool bls_verify(std::vector<std::string> sign, std::vector<std::string> pk,
+                std::string m) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::G1 signature = deserialize_G1(sign);
+    mcl::bn256::G2 pub = deserialize_G2(pk);
+    return Verify(signature, Q, pub, m);
+}
+
 }
 
 int main() {
@@ -299,6 +391,7 @@ int main() {
     // ORDER CHECK
     // std::string o = serialize_mpz(mcl::bn::BN::param.r);
     mpz_class o = mcl::bn::BN::param.r;
+    // std::cout << o;
     // mcl::bn256::Fr order = deserialize_Fr(o);
     mcl::bn256::G2 dd;
     mcl::bn256::G2 ee;
@@ -331,4 +424,17 @@ int main() {
     // std::string b = bindings::element_to_int_serialized(a, 20);
     // Keypair keypair = keygen();
     // print_keypair(keypair);
+
+    // BLS Check
+    mcl::bn256::Fr r;
+    r.setRand(rg);
+    std::string secret = serialize_Fr(r);
+    std::vector<std::string> pub = bindings::int_to_element_serialized(secret);
+    std::string message = "Hello there !@$#@$EDWS";
+    std::vector<std::string> sign = bindings::bls_sign(pub, secret, message);
+    if (bindings::bls_verify(sign, pub, message)) {
+        std::cout << "OK" << std::endl;
+    } else {
+        std::cout << "OUPS" << std::endl;
+    }
 }
