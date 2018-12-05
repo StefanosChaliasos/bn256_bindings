@@ -80,3 +80,16 @@ def inverse(elem):
     temp = [c.encode('utf-8') for c in elem]
     res = bn256.inverse_serialized(temp)
     return [c.decode("utf-8") for c in res]
+
+def sign(pub, secret, message):
+    temp1 = [c.encode('utf-8') for c in pub]
+    temp2 = secret.encode('utf-8')
+    temp3 = message.encode('utf-8')
+    signature = bn256.bls_sign(temp1, temp2, temp3)
+    return [c.decode("utf-8") for c in signature]
+
+def verify(sign, pub, message):
+    temp1 = [c.encode('utf-8') for c in sign]
+    temp2 = [c.encode('utf-8') for c in pub]
+    temp3 = message.encode('utf-8')
+    return bn256.bls_verify(temp1, temp2, temp3)

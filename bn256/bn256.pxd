@@ -39,3 +39,9 @@ cdef extern from "bn256_functions.h" namespace "bindings":
 
 cdef extern from "bn256_functions.h" namespace "bindings":
     vector[string] inverse_serialized(vector[string])
+
+cdef extern from "bn256_functions.h" namespace "bindings":
+    vector[string] bls_sign(vector[string], string, string)
+
+cdef extern from "bn256_functions.h" namespace "bindings":
+    bool bls_verify(vector[string], vector[string], string)
