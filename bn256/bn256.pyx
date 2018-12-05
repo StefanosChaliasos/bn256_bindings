@@ -83,7 +83,7 @@ def inverse(elem):
 
 def sign(pub, secret, message):
     temp1 = [c.encode('utf-8') for c in pub]
-    temp2 = secret.encode('utf-8')
+    temp2 = str(secret).encode('utf-8')
     temp3 = message.encode('utf-8')
     signature = bn256.bls_sign(temp1, temp2, temp3)
     return [c.decode("utf-8") for c in signature]
