@@ -369,6 +369,33 @@ bool bls_verify(std::vector<std::string> sign, std::vector<std::string> pk,
     return Verify(signature, Q, pub, m);
 }
 
+std::vector<std::string> encrypt(std::vector<std::string> mes,
+                                 std::vector<std::string> pub) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::Fr r;
+    r.setRand(rg);
+    mcl::bn256::G2 pk = deserialize_G2(pub);
+    mcl::bn256::G2 message = deserialize_G2(mes);
+    Encrypted encrypted;
+    mcl::bn256::G2 alpha;
+    mcl::bn256::G2 beta;
+    mcl::bn256::G2::mul(alpha, Q, r);
+    mcl::bn256::G2 temp;
+    mcl::bn256::G2::mul(temp, pk, r);
+    mcl::bn256::G2::add(beta, temp, message);
+    std::vector<std::string> serialized = serialize_G2(alpha);
+    // print_vector(serialized);
+    std::vector<std::string> serialized_beta = serialize_G2(beta);
+    // print_vector(serialized_beta);
+    serialized.insert(serialized.end(), serialized_beta.begin(),
+                      serialized_beta.end() );
+    std::string serialized_r = serialize_Fr(r);
+    serialized.push_back(serialized_r);
+    // std::cout << "*****************" << std::endl;
+    return serialized;
+}
+
 }
 
 int main() {
@@ -437,4 +464,9 @@ int main() {
     } else {
         std::cout << "OUPS" << std::endl;
     }
+
+    // ENCRYPT
+    std::vector<std::string> mes = bindings::int_to_element_serialized("10");
+    std::vector<std::string> encrypted = bindings::encrypt(mes, pub);
+    // print_vector(encrypted);
 }

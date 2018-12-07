@@ -49,6 +49,10 @@ std::vector<std::string> bls_sign(std::vector<std::string> pk,
 
 bool bls_verify(std::vector<std::string> sign, std::vector<std::string> pk,
                 std::string m);
+
+std::vector<std::string> encrypt(std::vector<std::string> message,
+                                 std::vector<std::string> pub);
+
 }
 
 

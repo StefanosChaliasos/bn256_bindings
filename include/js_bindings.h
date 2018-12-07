@@ -15,6 +15,10 @@ namespace js {
 
     std::vector<std::string> keygen();
 
+    std::vector<std::string> int_to_element(std::string message);
+
+    std::vector<std::string> encrypt(std::vector<std::string> pub,
+                                     std::vector<std::string> message);
 }
 
 #endif /* !JS_BINDIGS_H */
