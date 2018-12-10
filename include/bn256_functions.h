@@ -15,6 +15,8 @@ namespace bindings {
 
 using S_keypair = std::pair<std::string, std::vector<std::string> >;
 
+void print_vector(std::vector<std::string> v);
+
 std::string get_modulus_serialized();
 
 std::string get_order_serialized();
@@ -54,6 +56,14 @@ std::vector<std::string> encrypt(std::vector<std::string> message,
                                  std::vector<std::string> pub);
 
 std::string integer_from_elements_hash_s(std::vector<std::string> elements);
+
+std::vector<std::string> prove_encryption(std::vector<std::string> alpha,
+                                          std::vector<std::string> beta,
+                                          std::string secret);
+
+std::vector<std::string> compute_decryption_factor(
+        std::vector<std::string> alpha,
+        std::string secret);
 }
 
 

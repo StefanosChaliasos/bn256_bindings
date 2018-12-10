@@ -5,19 +5,30 @@ setTimeout(function(){
         let keys = bn256.keygen();
         let pub = keys[0];
         let secret = keys[1]
-        console.log(pub);
-        console.log(secret);
         ok(true);
     });
-    test("Encrypt", function () {
+    test("Encrypt-Prove", function () {
         let keys = bn256.keygen();
         let pub = keys[0];
         let message = "10";
         let result = bn256.encrypt(pub, message);
-        let ciphertexts = result[0];
+        let ciphertext = result[0];
         let secret = result[1];
-        console.log(ciphertexts);
-        console.log(secret);
+        let proofs = bn256.prove_encryption(ciphertext, secret);
+        ok(true);
+    });
+    test("Factors", function () {
+        let keys = bn256.keygen();
+        let pub = keys[0];
+        let secret = keys[1]
+        let message1 = "10";
+        let result1 = bn256.encrypt(pub, message1);
+        let ciphertext1 = result1[0];
+        let message2 = "11";
+        let result2 = bn256.encrypt(pub, message2);
+        let ciphertext2 = result2[0];
+        let ciphertexts = [ciphertext1, ciphertext2];
+        let factors = bn256.compute_decryption_factors(ciphertexts, secret);
         ok(true);
     });
 }, 500);

@@ -275,6 +275,11 @@ mcl::bn::Fr integer_from_elements_hash(std::vector<std::string> elements) {
 
 namespace bindings {
 
+void print_vector(std::vector<std::string> v) {
+    for (auto i = v.begin(); i != v.end(); ++i)
+        std::cout << *i << std::endl;
+}
+
 std::string get_modulus_serialized() {
     mcl::bn::initPairing(mcl::BN_SNARK1);
     std::string modulus = serialize_mpz(mcl::bn::BN::param.p);
@@ -394,6 +399,10 @@ bool bls_verify(std::vector<std::string> sign, std::vector<std::string> pk,
     return Verify(signature, Q, pub, m);
 }
 
+/*
+ * returns a vector that contains alpha(a) and beta(b), secret
+ * [a[0], a[1], a[2], a[3], b[0], b[1], b[2], b[3]]
+ */
 std::vector<std::string> encrypt(std::vector<std::string> mes,
                                  std::vector<std::string> pub) {
     mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
@@ -419,6 +428,85 @@ std::vector<std::string> encrypt(std::vector<std::string> mes,
     serialized.push_back(serialized_r);
     // std::cout << "*****************" << std::endl;
     return serialized;
+}
+
+std::vector<std::string> prove_encryption(std::vector<std::string> alpha,
+                                          std::vector<std::string> beta,
+                                          std::string secret) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::Fr dlog = deserialize_Fr(secret);
+    mpz_class o = mcl::bn::BN::param.r;
+    // *** prove_dlog ***
+    mcl::bn256::Fr r;
+    r.setRand(rg);
+    // commitment
+    mcl::bn256::G2 commitment;
+    mcl::bn256::G2::mul(commitment, Q, r);
+    // elements
+    std::vector<std::string> elements = alpha;
+    std::vector<std::string> s_commitment = serialize_G2(commitment);
+    elements.insert(elements.end(), s_commitment.begin(),
+                    s_commitment.end());
+    elements.insert(elements.end(), beta.begin(),
+                    beta.end());
+    // challenge
+    mcl::bn::Fr challenge = integer_from_elements_hash(elements);
+    // response
+    mcl::bn::Fr response = r + challenge * dlog;
+    // proofs
+    std::vector<std::string> proofs = s_commitment;
+    proofs.push_back(serialize_Fr(challenge));
+    proofs.push_back(serialize_Fr(response));
+    return proofs;
+}
+
+std::vector<std::string> compute_decryption_factor(
+        std::vector<std::string> alpha,
+        std::string secret) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::Fr s = deserialize_Fr(secret);
+    mcl::bn256::G2 pub;
+    mcl::bn256::G2::mul(pub, Q, s);
+    mcl::bn256::G2 a = deserialize_G2(alpha);
+    mcl::bn256::G2 data;
+    mcl::bn256::G2::mul(data, a, s);
+    // alpha, public, data, secret
+    // ** prove_ddh_tuple
+    mcl::bn256::Fr r;
+    r.setRand(rg);
+    mcl::bn256::G2 base_commitment;
+    mcl::bn256::G2::mul(base_commitment, Q, r);
+    mcl::bn256::G2 message_commitment;
+    mcl::bn256::G2::mul(message_commitment, a, r);
+    // pub, base_commitment, alpha, data, s
+    // elements
+    std::vector<std::string> elements = serialize_G2(pub);
+    std::vector<std::string> s_base_commitment = serialize_G2(base_commitment);
+    std::vector<std::string> s_data = serialize_G2(data);
+    std::vector<std::string> s_message_commitment =
+        serialize_G2(message_commitment);
+    elements.insert(elements.end(), s_base_commitment.begin(),
+                    s_base_commitment.end());
+    elements.insert(elements.end(), alpha.begin(),
+                    alpha.end());
+    elements.insert(elements.end(), s_data.begin(),
+                    s_data.end());
+    elements.insert(elements.end(), s_message_commitment.begin(),
+                    s_message_commitment.end());
+    // challenge
+    mcl::bn::Fr challenge = integer_from_elements_hash(elements);
+    // response
+    mcl::bn::Fr response = r + challenge * s;
+    std::vector<std::string> proof = s_base_commitment;
+    proof.insert(proof.end(), s_message_commitment.begin(),
+                    s_message_commitment.end());
+    proof.push_back(serialize_Fr(challenge));
+    proof.push_back(serialize_Fr(response));
+    std::vector<std::string> result = s_data;
+    result.insert(result.end(), proof.begin(), proof.end());
+    return result;
 }
 
 std::string integer_from_elements_hash_s(std::vector<std::string> elements) {
@@ -500,8 +588,16 @@ int main() {
     std::vector<std::string> encrypted = bindings::encrypt(mes, pub);
     // print_vector(encrypted);
 
+    // FACTORS
+    std::vector<std::string> alpha = encrypted;
+    alpha.resize(4);
+    // print_vector(alpha);
+    std::vector<std::string> factor =
+        bindings::compute_decryption_factor(alpha, secret);
+    // print_vector(factor);
+
     // HASH
     mcl::bn256::Fr num_hash;
     num_hash.setHashOf("Hello");
-    std::cout << num_hash << std::endl;
+    // std::cout << num_hash << std::endl;
 }

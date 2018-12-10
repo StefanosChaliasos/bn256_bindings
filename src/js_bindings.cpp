@@ -43,12 +43,43 @@ namespace js {
         std::vector<std::string> encrypted = bindings::encrypt(message, pub);
         return encrypted;
     }
+
+    /*
+     * Prove encryption.
+     * @return A vector of strings that contains
+     *      commitment, challenge, response.
+     */
+    std::vector<std::string> prove_encryption(std::vector<std::string> alpha,
+                                              std::vector<std::string> beta,
+                                              std::string secret) {
+        std::vector<std::string> proofs = bindings::prove_encryption(alpha,
+                                                                     beta,
+                                                                     secret);
+        return proofs;
+    }
+
+    /*
+     * Compute decryption factors for a ciphertext.
+     * @return A vector of string that contains
+     *      data,
+     *      base_commitment, message_commitment, challenge, response (proof).
+     */
+    std::vector<std::string> compute_decryption_factor(
+            std::vector<std::string> alpha,
+            std::string secret) {
+        std::vector<std::string> results =
+            bindings::compute_decryption_factor(alpha, secret);
+        return results;
+    }
 }
 
 EMSCRIPTEN_BINDINGS(my_module) {
     emscripten::function("keygen", &js::keygen);
     emscripten::function("int_to_element", &js::int_to_element);
     emscripten::function("encrypt", &js::encrypt);
+    emscripten::function("prove_encryption", &js::prove_encryption);
+    emscripten::function("compute_decryption_factor",
+            &js::compute_decryption_factor);
 }
 
 EMSCRIPTEN_BINDINGS(stl_wrappers) {
