@@ -93,3 +93,10 @@ def verify(sign, pub, message):
     temp2 = [c.encode('utf-8') for c in pub]
     temp3 = message.encode('utf-8')
     return bn256.bls_verify(temp1, temp2, temp3)
+
+def integer_from_elements_hash(elements):
+    temp = []
+    for e in elements:
+        temp.extend(e)
+    temp = [c.encode('utf-8') for c in temp]
+    return int(bn256.integer_from_elements_hash_s(temp))

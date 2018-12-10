@@ -45,3 +45,6 @@ cdef extern from "bn256_functions.h" namespace "bindings":
 
 cdef extern from "bn256_functions.h" namespace "bindings":
     bool bls_verify(vector[string], vector[string], string)
+
+cdef extern from "bn256_functions.h" namespace "bindings":
+    string integer_from_elements_hash_s(vector[string])

@@ -248,6 +248,31 @@ bool Verify(const mcl::bn256::G1& sign, const mcl::bn256::G2& Q,
 	return e1 == e2;
 }
 
+// end bls namespace
+
+mcl::bn::Fr integer_from_elements_hash(std::vector<std::string> elements) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    std::stringstream ss;
+    std::string r = serialize_mpz(mcl::bn::BN::param.r);
+    std::string p = serialize_mpz(mcl::bn::BN::param.p);
+    std::vector<std::string> q = serialize_G2(Q);
+    ss << r << "\x00";
+    ss << p << "\x00";
+    elements.insert(elements.begin(), q.begin(), q.end());
+    for (std::size_t i = 0; i != elements.size(); i++) {
+        if (i % 3 == 1 || i == 0)
+            ss << "\x00[" << elements[i] << ':';
+        else if (i % 4 == 0)
+            ss << elements[i] << ']';
+        else
+            ss << elements[i] << ':';
+    }
+    mcl::bn::Fr integer;
+    integer.setHashOf(ss.str());
+    return integer;
+}
+
 namespace bindings {
 
 std::string get_modulus_serialized() {
@@ -396,6 +421,11 @@ std::vector<std::string> encrypt(std::vector<std::string> mes,
     return serialized;
 }
 
+std::string integer_from_elements_hash_s(std::vector<std::string> elements) {
+    mcl::bn::Fr integer = integer_from_elements_hash(elements);
+    return serialize_Fr(integer);
+}
+
 }
 
 int main() {
@@ -469,4 +499,9 @@ int main() {
     std::vector<std::string> mes = bindings::int_to_element_serialized("10");
     std::vector<std::string> encrypted = bindings::encrypt(mes, pub);
     // print_vector(encrypted);
+
+    // HASH
+    mcl::bn256::Fr num_hash;
+    num_hash.setHashOf("Hello");
+    std::cout << num_hash << std::endl;
 }

@@ -53,6 +53,7 @@ bool bls_verify(std::vector<std::string> sign, std::vector<std::string> pk,
 std::vector<std::string> encrypt(std::vector<std::string> message,
                                  std::vector<std::string> pub);
 
+std::string integer_from_elements_hash_s(std::vector<std::string> elements);
 }
 
 
