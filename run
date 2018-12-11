@@ -4,7 +4,9 @@ c++ obj/bn256_functions.o -o bin/bn_256_functions mcl/lib/libmcl.a -L/usr/local/
 
 ./bin/bn_256_functions
 
-emcc -O3 -I mcl/include/ -I cybozulib/include/ -I include mcl/src/fp.cpp src/bn256_functions.cpp src/js_bindings.cpp -DNDEBUG -s WASM=1 -s DISABLE_EXCEPTION_CATCHING=0 --bind -o js/functions.js
+emcc -O3 -I mcl/include/ -I cybozulib/include/ -I include mcl/src/fp.cpp src/bn256_functions.cpp src/js_bindings.cpp -DNDEBUG -s WASM=1 -s DISABLE_EXCEPTION_CATCHING=0 --bind -o js/functions_browser.js
+
+emcc -O3 -I mcl/include/ -I cybozulib/include/ -I include mcl/src/fp.cpp src/bn256_functions.cpp src/js_bindings.cpp -DNDEBUG -s WASM=1 -s DISABLE_EXCEPTION_CATCHING=0 -s MODULARIZE=1 --bind -o js/functions_node.js
 
 # UBUNTU
 

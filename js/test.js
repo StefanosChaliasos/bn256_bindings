@@ -1,13 +1,15 @@
 // Ugly way to wait Module to load
-import * as bn256 from './bn256.js'
+import * as bn from './bn256_class.js'
 setTimeout(function(){
     test("Keygen", function () {
+        let bn256 = new bn.BN256(Module);
         let keys = bn256.keygen();
         let pub = keys[0];
-        let secret = keys[1]
+        let secret = keys[1];
         ok(true);
     });
     test("Encrypt-Prove", function () {
+        let bn256 = new bn.BN256(Module);
         let keys = bn256.keygen();
         let pub = keys[0];
         let message = "10";
@@ -18,6 +20,7 @@ setTimeout(function(){
         ok(true);
     });
     test("Factors", function () {
+        let bn256 = new bn.BN256(Module);
         let keys = bn256.keygen();
         let pub = keys[0];
         let secret = keys[1]
