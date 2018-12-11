@@ -1,0 +1,3 @@
+include setup.py
+include bn256/bn256.pyx
+include src/bn256_functions.cpp
