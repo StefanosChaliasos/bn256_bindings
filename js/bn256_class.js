@@ -5,7 +5,7 @@ function fill_vector(vector, array) {
     return vector;
 }
 
-export class BN256 {
+class BN256 {
     constructor(module) {
         this.wasm = module;
     }
@@ -44,13 +44,20 @@ export class BN256 {
         let beta = [encrypted.get(4), encrypted.get(5),
                      encrypted.get(6), encrypted.get(7)];
         let secret = encrypted.get(8);
-        let ciphertext = [alpha, beta];
-        return [ciphertext, secret];
+        let ciphertext = {
+            "alpha": alpha,
+            "beta": beta
+        };
+        let proof = this.prove_encryption(ciphertext, secret);
+        return {
+            "ciphertext": ciphertext,
+            "proof": proof
+        };
     }
 
     prove_encryption(ciphertext, secret) {
-        let alpha = ciphertext[0];
-        let beta = ciphertext[1];
+        let alpha = ciphertext["alpha"];
+        let beta = ciphertext["beta"];
         let a = new this.wasm.Vector();
         a = fill_vector(a, alpha);
         let b = new this.wasm.Vector();
@@ -61,11 +68,15 @@ export class BN256 {
                          proofs.get(2), proofs.get(3)];
         let challenge = proofs.get(4);
         let response = proofs.get(5);
-        return [commitment, challenge, response];
+        return {
+            "commitment": commitment,
+            "challenge": challenge,
+            "response": response
+        };
     }
 
     compute_decryption_factor(ciphertext, secret) {
-        let alpha = ciphertext[0];
+        let alpha = ciphertext["alpha"];
         let a = new this.wasm.Vector();
         a = fill_vector(a, alpha);
         let factor = new this.wasm.Vector();
@@ -78,7 +89,15 @@ export class BN256 {
                     factor.get(10), factor.get(11)];
         let challege = factor.get(12);
         let response = factor.get(13);
-        return [data, [base_commitment, message_commitment, challege, response]];
+        return {
+            "data": data,
+            "proof": {
+                "base_commitment": base_commitment,
+                "message_commitment": message_commitment,
+                "challege": challege,
+                "response": response
+            }
+        };
     }
 
     compute_decryption_factors(ciphertexts, secret) {
@@ -89,4 +108,4 @@ export class BN256 {
         return factors;
     }
 }
-// module.exports.BN256 = BN256;
+module.exports.BN256 = BN256;
