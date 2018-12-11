@@ -4,14 +4,14 @@ setTimeout(function(){
     test("Keygen", function () {
         let bn256 = new bn.BN256(Module);
         let keys = bn256.keygen();
-        let pub = keys[0];
-        let secret = keys[1];
+        let pub = keys["public"]["data"];
+        let secret = keys["secret"];
         ok(true);
     });
     test("Encrypt-Prove", function () {
         let bn256 = new bn.BN256(Module);
         let keys = bn256.keygen();
-        let pub = keys[0];
+        let pub = keys["public"]["data"];
         let message = "10";
         let result = bn256.encrypt(pub, message);
         let ciphertext = result[0];
@@ -22,8 +22,8 @@ setTimeout(function(){
     test("Factors", function () {
         let bn256 = new bn.BN256(Module);
         let keys = bn256.keygen();
-        let pub = keys[0];
-        let secret = keys[1]
+        let pub = keys["public"]["data"];
+        let secret = keys["secret"];
         let message1 = "10";
         let result1 = bn256.encrypt(pub, message1);
         let ciphertext1 = result1[0];

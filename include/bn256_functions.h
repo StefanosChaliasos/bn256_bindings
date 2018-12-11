@@ -25,6 +25,9 @@ std::vector<std::string> get_generator_serialized();
 
 S_keypair keygen_serialized();
 
+std::vector<std::string> prove_key(std::vector<std::string> pk,
+                                   std::string secret);
+
 std::vector<std::string> int_to_element_serialized(std::string integer);
 
 std::string element_to_int_serialized(std::vector<std::string> str_elem,

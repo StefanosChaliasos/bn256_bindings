@@ -21,6 +21,9 @@ namespace js {
         bindings::S_keypair keypair = bindings::keygen_serialized();
         std::vector<std::string> result = keypair.second;
         result.insert(result.begin(), keypair.first);
+        std::vector<std::string> proofs =
+            bindings::prove_key(keypair.second, keypair.first);
+        result.insert(result.end(), proofs.begin(), proofs.end());
         return result;
     }
 

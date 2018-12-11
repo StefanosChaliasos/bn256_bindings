@@ -15,7 +15,21 @@ export class BN256 {
         keypair = this.wasm.keygen();
         let secret = keypair.get(0);
         let pub = [keypair.get(1), keypair.get(2), keypair.get(3), keypair.get(4)];
-        return [pub, secret];
+        let commitment = [keypair.get(5), keypair.get(6),
+                         keypair.get(7), keypair.get(8)];
+        let challenge = keypair.get(9);
+        let response = keypair.get(10);
+        let result = {
+            "public": {"data": pub,
+                       "proof": {
+                           "commitment": commitment,
+                           "challenge": challenge,
+                           "response": response
+                       }
+            },
+            "secret": secret
+        };
+        return result;
     }
 
     encrypt(pk, message) {

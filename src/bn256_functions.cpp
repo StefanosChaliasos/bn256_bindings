@@ -305,6 +305,33 @@ bindings::S_keypair keygen_serialized() {
     return s_keypair;
 }
 
+std::vector<std::string> prove_key(std::vector<std::string> pk,
+                                          std::string secret) {
+    mcl::bn256::initPairing(mcl::bn::CurveSNARK1);
+    mcl::bn256::G2 Q(mcl::bn256::Fp2(aa, ab), mcl::bn256::Fp2(ba, bb));
+    mcl::bn256::Fr dlog = deserialize_Fr(secret);
+    // *** prove_dlog ***
+    mcl::bn256::Fr r;
+    r.setRand(rg);
+    // commitment
+    mcl::bn256::G2 commitment;
+    mcl::bn256::G2::mul(commitment, Q, r);
+    // elements
+    std::vector<std::string> elements = pk;
+    std::vector<std::string> s_commitment = serialize_G2(commitment);
+    elements.insert(elements.end(), s_commitment.begin(),
+                    s_commitment.end());
+    // challenge
+    mcl::bn::Fr challenge = integer_from_elements_hash(elements);
+    // response
+    mcl::bn::Fr response = r + challenge * dlog;
+    // proofs
+    std::vector<std::string> proofs = s_commitment;
+    proofs.push_back(serialize_Fr(challenge));
+    proofs.push_back(serialize_Fr(response));
+    return proofs;
+}
+
 std::vector<std::string> int_to_element_serialized(std::string integer) {
     std::vector<std::string> serialized_elem;
     mcl::bn256::Fr Fr_integer = deserialize_Fr(integer);
