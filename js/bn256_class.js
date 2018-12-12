@@ -5,7 +5,7 @@ function fill_vector(vector, array) {
     return vector;
 }
 
-class BN256 {
+export class BN256 {
     constructor(module) {
         this.wasm = module;
     }
@@ -94,18 +94,27 @@ class BN256 {
             "proof": {
                 "base_commitment": base_commitment,
                 "message_commitment": message_commitment,
-                "challege": challege,
+                "challenge": challege,
                 "response": response
             }
         };
     }
 
     compute_decryption_factors(ciphertexts, secret) {
+        let p = new this.wasm.Vector();
+        p = this.wasm.int_to_element(secret);
+        let pub = [p.get(0), p.get(1), p.get(2), p.get(3)];
         let factors = [];
         for (let i in ciphertexts) {
             factors.push(this.compute_decryption_factor(ciphertexts[i], secret));
         }
-        return factors;
+        return {
+            "factors": factors,
+            "public": {
+                "data": pub,
+                "proof": {}
+            }
+        };
     }
 }
-module.exports.BN256 = BN256;
+// module.exports.BN256 = BN256;
