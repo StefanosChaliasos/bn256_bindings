@@ -6,21 +6,13 @@
 #
 # Distributed under terms of the MIT license.
 
-from distutils.core import setup
-from distutils.sysconfig import get_python_lib
-from distutils.extension import Extension
-from Cython.Distutils import build_ext
+from setuptools import setup, find_packages
+from setuptools.extension import Extension
+from Cython.Build import cythonize
 import os
 
 os.environ['CC'] = 'c++'
 os.environ['CXX'] = 'c++'
-
-#  major = str(sys.version_info.major)
-#  minor = str(sys.version_info.minor)
-
-#  ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-#  VERSION = 'python' + major + '.' + minor
-#  LIB_PATH = get_python_lib()
 
 ext_modules = [Extension("bn256",
                          sources=["bn256/bn256.pyx",
@@ -47,4 +39,8 @@ ext_modules = [Extension("bn256",
                         )
               ]
 
-setup(cmdclass = {'build_ext': build_ext}, ext_modules = ext_modules)
+setup(
+    name = "bn256",
+    packages = [],
+    ext_modules = cythonize(ext_modules)
+)
